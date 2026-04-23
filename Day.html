@@ -1,21 +1,42 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 確保 script 標籤正確加載 -->
     <script src="https://thunkable.github.io/webviewer-extension/thunkableWebviewerExtension.js" type="text/javascript"></script>
 </head>
 <body>
-    <h1>H1</h1>
+    <h1 id="status">等待連線...</h1>
+
     <script>
+        // 當擴充功能準備就緒時
         ThunkableWebviewerExtension.receiveMessage(function(message) {
-            const dates = JSON.parse(message);
-            const start = new Date(dates[0]);
-            const end = new Date(dates[1]);
+            try {
+                document.getElementById('status').innerText = "計算中...";
+                
+                // 解析訊息
+                const dates = JSON.parse(message);
+                
+                // 檢查是否為陣列且有兩個值
+                if (Array.isArray(dates) && dates.length >= 2) {
+                    const start = new Date(dates[0]);
+                    const end = new Date(dates[1]);
 
-            const diffInMs = Math.abs(end - start);
-            const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+                    // 計算毫秒差
+                    const diffInMs = Math.abs(end - start);
+                    // 轉為天數
+                    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
 
-            ThunkableWebviewerExtension.postMessage(diffInDays.toString());
-        });</script>
+                    // 回傳結果給 Thunkable
+                    ThunkableWebviewerExtension.postMessage(diffInDays.toString());
+                    document.getElementById('status').innerText = "已回傳: " + diffInDays;
+                } else {
+                    ThunkableWebviewerExtension.postMessage("Error: Invalid Input");
+                }
+            } catch (e) {
+                ThunkableWebviewerExtension.postMessage("Error: " + e.message);
+            }
+        });
+    </script>
 </body>
 </html>
