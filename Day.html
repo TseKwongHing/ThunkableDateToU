@@ -13,7 +13,7 @@
             const diffInMs = Math.abs(end - start);
             const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
 
-            ThunkableWebviewerExtension.postMessage("diffInDays.toString()");
+            ThunkableWebviewerExtension.postMessage(diffInDays.toString());
         });</script>
 </body>
 </html>
