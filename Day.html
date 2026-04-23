@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- 必須引入 Thunkable 擴充腳本以進行溝通 -->
+    <script src="https://thunkable.github.io/webviewer-extension/thunkableWebviewerExtension.js" type="text/javascript"></script>
+</head>
+<body>
+    <script>// 監聽來自 Thunkable App 的訊息
+        ThunkableWebviewerExtension.receiveMessage(function(message) {
+            // 假設傳入的是 JSON 格式: ["2024-01-01", "2024-12-25"]
+            const dates = JSON.parse(message);
+            const start = new Date(dates[0]);
+            const end = new Date(dates[1]);
+
+            // 計算毫秒差並轉為天數
+            const diffInMs = Math.abs(end - start);
+            const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+            // 將結果傳回 Thunkable App
+            ThunkableWebviewerExtension.postMessage(diffInDays.toString());
+        });</script>
+</body>
+</html>
