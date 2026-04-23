@@ -6,8 +6,7 @@
 </head>
 <body>
     <h1>H1</h1>
-</body>
-        <script>
+    <script>
         ThunkableWebviewerExtension.receiveMessage(function(message) {
             const dates = JSON.parse(message);
             const start = new Date(dates[0]);
@@ -18,4 +17,5 @@
 
             ThunkableWebviewerExtension.postMessage(diffInDays.toString());
         });</script>
+</body>
 </html>
